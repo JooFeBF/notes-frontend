@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from 'react'
-import postNote from '../services/setNote'
+import notesService from '../services/notesService'
 import Context from '../context/noteContext'
-import Toggleable from './toggable'
+import Toggleable from './toggleable'
 
 const PostNote = () => {
   const { setNotes } = useContext(Context)
@@ -19,7 +19,9 @@ const PostNote = () => {
     event.preventDefault()
     if (JSON.parse(window.localStorage.getItem('userInfo'))?.token) {
       const token = JSON.parse(window.localStorage.getItem('userInfo'))?.token
-      postNote(title, content, null, token).then(note => { if (note) setNotes(prevNotes => [...prevNotes, note]) }).catch(error => console.log(error))
+      notesService.postNote(title, content, null, token)
+        .then(note => { if (note) setNotes(prevNotes => [...prevNotes, note]) })
+        .catch(error => console.log(error))
       setTitle('')
       setContent('')
       toggleRef.current.handleToggleVisibility()
@@ -30,8 +32,8 @@ const PostNote = () => {
     <Toggleable buttonLabel={'Write a note'} ref={toggleRef}>
       <div>
         <form onSubmit={handleSubmit}>
-          <input type='text' value={title} onChange={handleChangeTitle} placeholder='here goes your title' />
-          <input type='text' value={content} onChange={handleChangeContent} placeholder='here goes your content' />
+          <input type='text' value={title} onChange={handleChangeTitle} placeholder='Here goes your title' />
+          <input type='text' value={content} onChange={handleChangeContent} placeholder='Here goes your content' />
           <button type='submit'>Add</button>
         </form>
       </div>

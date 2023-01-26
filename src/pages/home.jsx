@@ -1,10 +1,10 @@
 import { useEffect, useContext, useState } from 'react'
 import '../App.css'
-import getNotes from '../services/getNotes'
-import AllNotes from '../components/notes'
+import notesService from '../services/notesService'
 import PostNote from '../components/postNoteForm'
 import Context from '../context/noteContext'
 import LoginForm from '../components/loginForm'
+import ListOfNotes from '../components/listOfNotes'
 
 function Home () {
   const { notes, setNotes } = useContext(Context)
@@ -15,7 +15,7 @@ function Home () {
   }, [])
 
   useEffect(() => {
-    getNotes().then(data => setNotes(data))
+    notesService.getNotes().then(data => setNotes(data))
   }, [])
 
   const handleClick = (e) => {
@@ -30,7 +30,7 @@ function Home () {
       {
         user.token ? <> <p>{user.username}</p> <button onClick={handleClick}>Logout</button> <PostNote /> </> : <LoginForm setUser={setUser} />
       }
-      <AllNotes notes={notes} />
+      <ListOfNotes notes={notes} />
     </div>
   )
 }
